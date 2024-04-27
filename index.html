@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+  <title>رابط الوثائق</title>
+  <style>
+    body {
+      direction: rtl;
+      font-family: "Alexandria";
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      line-height: 1.8;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center; /* Added to center align text */
+    }
+
+    h1 {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>رابط الوثائق</h1>
+    <img src="https://c.tenor.com/IundV5I_Q9wAAAAC/tenor.gif" alt="صورة" style="height: 130px;border-radius: 17px;">
+    <p>للأسف غلطت في كتابة الرابط اللي في الفيديو الذي يحتوي على رابط الوثائق.. ولكن لا تقلق، انقر على الزر في الأسفل وسوف يوجهك للرابط الصحيح</p>
+    <a href="https://bit.ly/watikaty" target="_blank" class="button">رابط الوثائق</a>
+    <p style="color: white;font-size:10px;">تحياتي سي أمين... كنعاونو الشباب لي تلف هههههه الأمور طيبة يعني</p>
+    <p>شي دعيوة الله يحفظك</p>
+  
+    <h1 id="msg"></h1>
+ 
+    <form id="commentForm">
+      <input style="font-family: Alexandria;height: 50px;border-radius: 15px;text-align: center;" type="text" name="name" placeholder='أدخل تعليقك هنا...' id="commentField">
+      <br><br>
+      <input style="font-family: Alexandria ;background-color: #a5f9a9;color: black;" type="submit" id="sub" class="button" value="إرسال">
+    </form>
+
+    <!-- Dropdown for comments and prayers -->
+    <select id="commentsDropdown" style="font-family: Alexandria; margin-top: 20px;">
+      <option selected disabled>تعليقاتكم ودعواتكم</option>
+    </select>
+  </div>
+
+ <script>
+    let form = document.getElementById("commentForm");
+    let commentsDropdown = document.getElementById('commentsDropdown');
+      
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+         
+        document.querySelector("#sub").value = "تعليقك غادي فالطريق ..";
+          
+        let data = new FormData(form);
+        data.append('col5', '1'); // Append '1' to column 5
+        fetch('https://script.google.com/macros/s/AKfycbwgflbcc5gVFjyg00bsJFWCMMZ1DsoOZkcIqB9Z-wdJmfhzA_UZNRPwIl5BUMqZoqTu/exec', {
+            method: "POST",
+            body: data
+        })
+        .then(res => res.text())
+        .then(data => {
+            document.querySelector("#msg").innerHTML = "وصلنا تعليقك";
+            document.querySelector("#sub").value = "إرسال";
+        });
+    });
+
+    // Fetch comments and prayers from Google Sheets API
+    fetch('https://sheets.googleapis.com/v4/spreadsheets/1buoEKat6J_kpdcPXzT-adXnNGmO1Stw57ivYoBfEGw0/values/Sheet1!A:I100?key=YOUR_API_KEY')
+      .then(response => response.json())
+      .then(data => {
+        data.values.slice(1).forEach(row => {
+          commentsDropdown.innerHTML += `<option>${row[0]}</option>`; // Assuming the comments are in the first column
+        });
+      });
+ </script>
+</body>
+</html>
